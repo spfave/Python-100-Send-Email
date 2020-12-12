@@ -18,18 +18,20 @@ class BirthdayMailer():
 
     def __init__(self):
         """  """
-        self.get_date()
-        self.get_birthdays()
-
-    def get_date(self):
         self.date = dt.datetime.now().date()
+        # self.get_birthdays()
+
+    def send_Birthday_letters(self):
+        if self.get_birthdays():
+            self.check_birthdays()
+        else:
+            print("No birthdays data exists")
 
     def get_birthdays(self):
         try:
             with open(file_birthdays, mode="r") as data_file:
                 self.birthdays = pd.read_csv(data_file, index_col=0)
         except FileNotFoundError:
-            print("No birthdays data exists")
             return False
         else:
             return True
@@ -43,13 +45,6 @@ class BirthdayMailer():
 
     def check_birthday(self, date):
         return date.month == self.date.month and date.day == self.date.day
-
-    def generate_letter(self, name):
-        letter_id = random.randint(1, 3)
-        with open(f"letter_templates/letter_{letter_id}.txt") as letter_file:
-            letter_template = letter_file.read()
-        letter_msg = letter_template.replace("[NAME]", name)
-        return letter_msg
 
     def send_Birthday_letter(self, birthday_person):
         subject = f"Happy Birthday {birthday_person.name}"
@@ -65,10 +60,18 @@ class BirthdayMailer():
                 to_addrs=pr.to_email,
                 msg=email_msg)
 
+    def generate_letter(self, name):
+        letter_id = random.randint(1, 3)
+        with open(f"letter_templates/letter_{letter_id}.txt") as letter_file:
+            letter_template = letter_file.read()
+        letter_msg = letter_template.replace("[NAME]", name)
+        return letter_msg
+
 
 # Main
 birthday_mailer = BirthdayMailer()
-birthday_mailer.check_birthdays()
+birthday_mailer.send_Birthday_letters()
+
 
 ##################### Extra Hard Starting Project ######################
 
