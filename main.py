@@ -24,16 +24,28 @@ class BirthdayMailer():
         try:
             with open(file_birthdays, mode="r") as data_file:
                 self.birthdays = pd.read_csv(data_file)
+                print(type(self.birthdays))
         except FileNotFoundError:
             print("No birthdays data exists")
             return False
         else:
             return True
 
+    def check_birthdays(self):
+        for _, row in self.birthdays.iterrows():
+            birthday = dt.datetime(
+                year=row.year, month=row.month, day=row.day).date()
+            if self.check_birthday(birthday):
+                print(birthday)
 
-# Main
+    def check_birthday(self, date):
+        return date.month == self.date.month and date.day == self.date.day
+
+
+        # Main
 birthday_mailer = BirthdayMailer()
-print(birthday_mailer.birthdays)
+birthday_mailer.check_birthdays()
+# print(birthday_mailer.birthdays)
 
 ##################### Extra Hard Starting Project ######################
 
