@@ -15,14 +15,25 @@ class BirthdayMailer():
     def __init__(self):
         """  """
         self.get_date()
+        self.get_birthdays()
 
     def get_date(self):
         self.date = dt.datetime.now().date()
 
+    def get_birthdays(self):
+        try:
+            with open(file_birthdays, mode="r") as data_file:
+                self.birthdays = pd.read_csv(data_file)
+        except FileNotFoundError:
+            print("No birthdays data exists")
+            return False
+        else:
+            return True
+
 
 # Main
 birthday_mailer = BirthdayMailer()
-print(birthday_mailer.date)
+print(birthday_mailer.birthdays)
 
 ##################### Extra Hard Starting Project ######################
 
